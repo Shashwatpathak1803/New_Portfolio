@@ -1,5 +1,7 @@
 # Shashwat Pathak's Portfolio
 
+Personal portfolio showcasing web development projects, technical skills, AI integrations, and interactive experiences.
+
 > An award-winning personal portfolio website built with Next.js 15, React, TypeScript, and Framer Motion. Designed to impress on first sight and engineered for performance.
 
 ## 🎯 Features

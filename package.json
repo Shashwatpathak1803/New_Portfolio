@@ -1,0 +1,44 @@
+{
+  "name": "shashwat-pathak-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "fetch-hero": "curl -L https://pub-1e5b4001b36b47e28e6a2fb775966a79.r2.dev/templates/aurora/hero.mp4 -o public/hero.mp4",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@types/node": "^22.8.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.20",
+    "bcryptjs": "^3.0.3",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.11.9",
+    "gsap": "^3.12.5",
+    "jose": "^6.2.12",
+    "lenis": "^1.1.16",
+    "lucide-react": "^0.453.0",
+    "mongoose": "^9.11.2",
+    "next": "^15.5.6",
+    "nodemailer": "^10.2.1",
+    "postcss": "^8.4.47",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss": "^3.4.14",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.6.3",
+    "unpdf": "^1.9.1"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^8.0.2",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.6"
+  }
+}

@@ -1,0 +1,505 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  scroll-behavior: auto;
+}
+
+/* ---------- Theme tokens (space-separated RGB so Tailwind opacity works) ---------- */
+/* ---------- Theme tokens (space-separated RGB so Tailwind opacity works) ---------- */
+/* Sandstone + Petrol: Warm, artistic, editorial, and distinctive */
+:root {
+  --base: 237 224 200; /* #EDE0C8 warm Sandstone canvas */
+  --surface: 213 192 160; /* #D5C0A0 Sandstone surface */
+  --surface-2: 223 205 178; /* elevated Sandstone */
+  --ink: 18 59 64; /* #123B40 deep Petrol editorial ink */
+  --muted: 58 88 92; /* high-clarity muted Petrol slate */
+  --accent: 232 117 42; /* #E8752A warm terracotta Accent */
+  --accent-soft: 240 141 78;
+  --petrol: 18 59 64; /* #123B40 Petrol */
+  --teal: 29 98 101; /* #1D6265 Teal */
+  --grad-1: #123B40;
+  --grad-2: #1D6265;
+  --grad-3: #E8752A;
+  --grad-4: #F08D4E;
+  color-scheme: light;
+}
+
+html.light {
+  --base: 237 224 200;
+  --surface: 213 192 160;
+  --surface-2: 223 205 178;
+  --ink: 18 59 64;
+  --muted: 58 88 92;
+  --accent: 232 117 42;
+  --accent-soft: 240 141 78;
+  --petrol: 18 59 64;
+  --teal: 29 98 101;
+  --grad-1: #123B40;
+  --grad-2: #1D6265;
+  --grad-3: #E8752A;
+  --grad-4: #F08D4E;
+  color-scheme: light;
+}
+
+html.dark {
+  --base: 11 37 40; /* #0B2528 deep nocturnal Petrol */
+  --surface: 18 59 64; /* #123B40 Petrol */
+  --surface-2: 29 98 101; /* #1D6265 Teal */
+  --ink: 237 224 200; /* #EDE0C8 warm Sandstone text */
+  --muted: 195 175 148; /* #D5C0A0 Sandstone muted */
+  --accent: 232 117 42; /* #E8752A Accent */
+  --accent-soft: 245 145 75;
+  --petrol: 18 59 64;
+  --teal: 29 98 101;
+  --grad-1: #EDE0C8;
+  --grad-2: #D5C0A0;
+  --grad-3: #E8752A;
+  --grad-4: #1D6265;
+  color-scheme: dark;
+}
+
+/* Background lives on <html> so the animated layer can sit between it and the content */
+html {
+  overflow-x: clip; /* decorative blurred glows must never create sideways scrolling on phones */
+  position: relative; /* framer-motion measures scroll offsets against <html>; static triggers a dev warning */
+  background-color: rgb(var(--base));
+  color: rgb(var(--ink));
+}
+
+body {
+  background-color: transparent;
+  color: rgb(var(--ink));
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* Smooth cross-fade when the theme is toggled (class is added briefly by ThemeToggle) */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.45s ease, color 0.45s ease, border-color 0.45s ease,
+    fill 0.45s ease, stroke 0.45s ease, box-shadow 0.45s ease !important;
+}
+
+::selection {
+  background: rgba(232, 117, 42, 0.35);
+  color: #ffffff;
+}
+
+/* Thin, on-brand scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgb(var(--base));
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #E8752A, #1D6265);
+  border-radius: 8px;
+}
+
+/* Visible keyboard focus everywhere */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #E8752A;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Reusable design utilities ---------- */
+
+/* Dark Teal cards contrasting against warm Sandstone backgrounds */
+.glass {
+  --ink: 245 238 226; /* warm Sandstone cream text inside card */
+  --muted: 198 185 168; /* soft Sandstone muted text inside card */
+  --surface: 24 72 78; /* Petrol/Teal inner surface (inputs, sub-cards) */
+  --surface-2: 29 98 101; /* #1D6265 Teal tag surface */
+  --grad-1: #E8752A;
+  --grad-2: #F08D4E;
+  --grad-3: #D5C0A0;
+  --grad-4: #EDE0C8;
+  background: rgba(18, 59, 64, 0.90); /* #123B40 Petrol card body */
+  border: 1px solid rgba(29, 98, 101, 0.45); /* #1D6265 Teal border */
+  box-shadow:
+    0 1px 3px rgba(11, 37, 40, 0.12),
+    0 10px 30px -6px rgba(11, 37, 40, 0.28),
+    0 20px 45px -12px rgba(18, 59, 64, 0.25);
+  color: rgb(var(--ink));
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+}
+.glass:hover {
+  border-color: rgba(232, 117, 42, 0.5); /* #E8752A Accent on hover */
+  box-shadow:
+    0 2px 6px rgba(11, 37, 40, 0.15),
+    0 16px 42px -8px rgba(11, 37, 40, 0.38),
+    0 0 40px -8px rgba(232, 117, 42, 0.22);
+}
+html.dark .glass {
+  background: rgba(18, 59, 64, 0.88);
+  border: 1px solid rgba(29, 98, 101, 0.55);
+  box-shadow: inset 0 1px 0 rgba(237, 224, 200, 0.08), 0 10px 30px -10px rgba(5, 19, 20, 0.55);
+}
+html.dark .glass:hover {
+  border-color: rgba(232, 117, 42, 0.6);
+  box-shadow: inset 0 1px 0 rgba(237, 224, 200, 0.12), 0 14px 40px -8px rgba(232, 117, 42, 0.3);
+}
+
+.text-gradient {
+  background: linear-gradient(95deg, var(--grad-1) 10%, var(--grad-2) 45%, var(--grad-3) 70%, var(--grad-4) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* slowly sweeping colour on the hero name */
+.text-gradient-shimmer {
+  background-size: 220% 100%;
+  animation: shimmer-x 8s ease-in-out infinite;
+}
+@keyframes shimmer-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.text-gradient-gold {
+  background: linear-gradient(95deg, #EDE0C8, #D5C0A0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  display: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.section-padding {
+  padding-top: clamp(5rem, 10vw, 8rem);
+  padding-bottom: clamp(5rem, 10vw, 8rem);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgb(var(--muted));
+}
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #E8752A;
+  pointer-events: none;
+  z-index: 100;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(232, 117, 42, 0.7);
+  box-shadow: 0 0 20px rgba(232, 117, 42, 0.25);
+  pointer-events: none;
+  z-index: 99;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 768px) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
+
+
+/* ---------- Animated page background ---------- */
+.bg-grid {
+  position: absolute;
+  inset: -64px;
+  background-image:
+    linear-gradient(rgb(var(--ink) / 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--ink) / 0.055) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 15%, transparent 78%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 15%, transparent 78%);
+  animation: grid-pan 40s linear infinite;
+}
+@keyframes grid-pan {
+  to { transform: translate(64px, 64px); }
+}
+
+.bg-blob {
+  position: absolute;
+  border-radius: 9999px;
+  will-change: transform;
+  transform: translateZ(0);
+}
+.bg-blob-a {
+  top: -10%; left: -8%;
+  width: 52vmax; height: 52vmax;
+  background: radial-gradient(closest-side, rgba(29, 98, 101, 0.14), transparent);
+  animation: drift-a 26s ease-in-out infinite alternate;
+}
+.bg-blob-b {
+  top: 20%; right: -12%;
+  width: 46vmax; height: 46vmax;
+  background: radial-gradient(closest-side, rgba(232, 117, 42, 0.12), transparent);
+  animation: drift-b 32s ease-in-out infinite alternate;
+}
+.bg-blob-c {
+  bottom: -15%; left: 16%;
+  width: 50vmax; height: 50vmax;
+  background: radial-gradient(closest-side, rgba(213, 192, 160, 0.40), transparent);
+  animation: drift-c 36s ease-in-out infinite alternate;
+}
+.bg-blob-d {
+  top: 55%; left: -14%;
+  width: 34vmax; height: 34vmax;
+  background: radial-gradient(closest-side, rgba(18, 59, 64, 0.09), transparent);
+  animation: drift-b 40s ease-in-out infinite alternate-reverse;
+}
+html.dark .bg-blob-a { background: radial-gradient(closest-side, rgba(29, 98, 101, 0.38), transparent); }
+html.dark .bg-blob-b { background: radial-gradient(closest-side, rgba(232, 117, 42, 0.24), transparent); }
+html.dark .bg-blob-c { background: radial-gradient(closest-side, rgba(213, 192, 160, 0.20), transparent); }
+html.dark .bg-blob-d { background: radial-gradient(closest-side, rgba(18, 59, 64, 0.5), transparent); }
+
+@keyframes drift-a {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(14vw, 10vh) scale(1.15); }
+  100% { transform: translate(6vw, 26vh) scale(0.95); }
+}
+@keyframes drift-b {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-16vw, 12vh) scale(1.2); }
+  100% { transform: translate(-6vw, -14vh) scale(0.9); }
+}
+@keyframes drift-c {
+  0%   { transform: translate(0, 0) scale(1.05); }
+  50%  { transform: translate(18vw, -14vh) scale(0.92); }
+  100% { transform: translate(-10vw, -6vh) scale(1.18); }
+}
+
+/* Occasional light streaks crossing the page */
+.bg-streak {
+  position: absolute;
+  top: -10%;
+  left: 0;
+  width: 2px;
+  height: 22vh;
+  background: linear-gradient(180deg, transparent, rgb(var(--accent) / 0.9), transparent);
+  opacity: 0;
+  transform: rotate(35deg);
+  animation: streak 9s ease-in infinite;
+}
+.bg-streak:nth-of-type(1) { left: 12%; animation-delay: 1s; }
+.bg-streak:nth-of-type(2) { left: 46%; animation-delay: 4.5s; animation-duration: 11s; }
+.bg-streak:nth-of-type(3) { left: 78%; animation-delay: 7s; animation-duration: 10s; }
+@keyframes streak {
+  0%   { opacity: 0; transform: translate(0, 0) rotate(35deg); }
+  8%   { opacity: 0.9; }
+  30%  { opacity: 0; transform: translate(-38vh, 70vh) rotate(35deg); }
+  100% { opacity: 0; transform: translate(-38vh, 70vh) rotate(35deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-streak { display: none; }
+}
+
+/* ---------- Extra motion ---------- */
+
+/* Tech ticker */
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 48s linear infinite;
+}
+.marquee-track.marquee-reverse {
+  animation-direction: reverse;
+  animation-duration: 56s;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; }
+  .marquee-track { animation: none !important; }
+}
+
+/* Light sweep across cards on hover */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -70%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgb(var(--accent) / 0.18), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.9s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+.shine:hover::before {
+  left: 135%;
+}
+
+/* Periodic sheen on the primary button */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.4) 50%, transparent 65%);
+  transform: translateX(-130%);
+  animation: btn-sheen 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes btn-sheen {
+  0%, 55% { transform: translateX(-130%); }
+  100% { transform: translateX(130%); }
+}
+
+/* Moving highlight inside the skill bars */
+.skill-bar {
+  position: relative;
+  overflow: hidden;
+}
+.skill-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(-100%);
+  animation: bar-sheen 3.4s ease-in-out infinite;
+}
+@keyframes bar-sheen {
+  0%, 40% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+
+/* ---------- 3D hero helpers ---------- */
+
+/* The 3D hero is always a bright golden-hour scene (in both themes), so anything
+   that sits on top of it uses fixed warm-dark ink instead of the theme ink. */
+
+/* Frosted "liquid glass" button with a sheen that sweeps across on hover */
+.liquid-glass {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.08));
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.85),
+    inset 0 -8px 18px rgba(255, 255, 255, 0.18),
+    0 10px 40px rgba(45, 30, 12, 0.22);
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(115deg, transparent 28%, rgba(255, 255, 255, 0.65) 48%, transparent 68%);
+  transform: translateX(-120%);
+  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+.liquid-glass:hover::before {
+  transform: translateX(120%);
+}
+.liquid-glass:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -8px 18px rgba(255, 255, 255, 0.25),
+    0 16px 50px rgba(45, 30, 12, 0.3);
+}
+
+/* Lighter, dark-text variant for secondary hero actions */
+.hero-chip {
+  background: rgba(255, 250, 242, 0.55);
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  border: 1px solid rgba(36, 26, 16, 0.14);
+  color: #241a10;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+.hero-chip:hover {
+  background: rgba(255, 250, 242, 0.85);
+  border-color: rgba(36, 26, 16, 0.3);
+}
+
+/* While the navbar floats over the hero video, re-scope the theme colours
+   so the logo, links, and toggle stay razor-sharp and consistent */
+.nav-on-hero {
+  --ink: 247 242 232;
+  --muted: 213 192 160;
+  --grad-1: #EDE0C8;
+  --grad-2: #D5C0A0;
+  --grad-3: #E8752A;
+  --grad-4: #1D6265;
+}
+.nav-on-hero .glass {
+  background: rgba(18, 59, 64, 0.78);
+  border: 1px solid rgba(29, 98, 101, 0.45);
+  box-shadow: 0 8px 30px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Breathing "available" dot */
+@keyframes pulse-ring {
+  0% { transform: scale(0.5); opacity: 0.6; }
+  70%, 100% { transform: scale(2.4); opacity: 0; }
+}
+.animate-pulse-ring {
+  animation: pulse-ring 2.1s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+}
+
+
